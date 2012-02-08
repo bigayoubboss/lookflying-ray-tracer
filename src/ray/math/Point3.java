@@ -148,4 +148,9 @@ public class Point3 extends Tuple3 {
     this.z += scale * vector.z;
 
   }
+  public Point3(double scale, Point3 start, Point3 end){
+	  this.x =start.x +(end.x - start.x) * scale;
+	  this.y =start.y +(end.y - start.y) * scale;
+	  this.z =start.z +(end.z - start.z) * scale;
+  }
 }
