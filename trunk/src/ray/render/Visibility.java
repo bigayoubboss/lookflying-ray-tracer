@@ -12,7 +12,6 @@ import ray.surface.Surface;
 public class Visibility {
 	PreCal preCal;
 	Image tempImage;
-	Point3 beginPoint;
 
 	public Visibility(Scene scene) {
 
@@ -20,33 +19,28 @@ public class Visibility {
 		System.out.print(preCal.toString());
 		Intersect.setSurfaces(scene.getSurfaces());
 		tempImage = new Image(preCal.resolutionB, preCal.resolutionA);
-		beginPoint = new Point3(preCal.viewCenter);
-		beginPoint.scaleAdd(-preCal.deltaA * preCal.resolutionA / 2, preCal.vectorA);
-		beginPoint.scaleAdd(-preCal.deltaB * preCal.resolutionB / 2, preCal.vectorB);
-		System.out.println(String.format("Begin Point = %s", beginPoint));
+
 	}
 
 	public void judge() {
-		Point3 currentPoint = new Point3(beginPoint);
-		int direction = 1;
+		Point3 currentPointR;
+		Point3 currentPointL;
+		Point3 currentPoint;
 		for (int i = 0; i < preCal.resolutionA; i++) {
-			if (direction > 0) {
-				for (int j = 0; j < preCal.resolutionB; j++) {
-					currentPoint.scaleAdd(preCal.deltaB, preCal.vectorB);
-					judgeColor(i, j, direction, currentPoint);
-				}
-			} else {
-				for (int j = 0; j < preCal.resolutionB; j++) {
-					currentPoint.scaleAdd(-preCal.deltaB, preCal.vectorB);
-					judgeColor(i, j, direction, currentPoint);
-				}
+			currentPointR = new Point3(i / (double) preCal.resolutionA,
+					preCal.cornerRB, preCal.cornerRT);
+			currentPointL = new Point3(i / (double) preCal.resolutionA,
+					preCal.cornerLB, preCal.cornerLT);
+			for (int j = 0; j < preCal.resolutionB; j++) {
+				currentPoint = new Point3(j / (double) preCal.resolutionB,
+						currentPointL, currentPointR);
+				judgeColor(i, j, currentPoint);
+
 			}
-			direction = -direction;
-			currentPoint.scaleAdd(preCal.deltaA, preCal.vectorA);
 		}
 	}
 
-	private void judgeColor(int i, int j, int dir, Point3 current) {
+	private void judgeColor(int i, int j, Point3 current) {
 		// System.out.println(String.format("current:[%f,%f,%f]",
 		// current.x,current.y,current.z));
 
@@ -54,20 +48,11 @@ public class Visibility {
 		Surface visible = cur.isIntersected();
 		if (visible != null) {
 			// System.out.print(String.format("[%d,%d]", i,j));
-			if (dir > 0) {
-				tempImage.setPixelColor(getShaderColor(visible.getShader()), j,
-						i);
-			} else {
-				tempImage.setPixelColor(getShaderColor(visible.getShader()),
-						preCal.resolutionB - 1 - j, i);
-			}
+
+			tempImage.setPixelColor(getShaderColor(visible.getShader()), j, i);
+
 		} else {
-			if (dir > 0) {
-				tempImage.setPixelColor(new Color(0, 0, 0), j, i);
-			} else {
-				tempImage.setPixelColor(new Color(0, 0, 0), preCal.resolutionB
-						- 1 - j, i);
-			}
+			tempImage.setPixelColor(new Color(0, 0, 0), j, i);
 		}
 	}
 
