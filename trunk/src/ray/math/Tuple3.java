@@ -77,6 +77,7 @@ public class Tuple3 {
 
   }
 
+
   /**
    * Sets this tuple to have the contents of another tuple.  Allows quick
    * conversion between points and vectors.

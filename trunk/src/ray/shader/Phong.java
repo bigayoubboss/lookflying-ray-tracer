@@ -35,7 +35,7 @@ public class Phong implements Shader {
 	}
 
 	public Color getSpecularColor() {
-		return diffuseColor;
+		return specularColor;
 	}
 
 	/** The exponent controlling the sharpness of the specular reflection. */
@@ -43,6 +43,9 @@ public class Phong implements Shader {
 
 	public void setExponent(double exponent) {
 		this.exponent = exponent;
+	}
+	public double getExponent(){
+		return exponent;
 	}
 
 	public Phong() {

@@ -1,7 +1,6 @@
 package ray;
 
-import ray.math.Color;
-import ray.render.Visibility;
+import ray.render.Tracer;
 
 /**
  * A simple ray tracer.
@@ -28,7 +27,7 @@ public class RayTracer {
 
 			// Parse the input file
 			Scene scene = (Scene) parser.parse(inputFilename, Scene.class);
-			System.out.println(String.format("Ambient = %f",scene.getAmbient()));
+			
 			// Render the scene
 			renderImage(scene);
 
@@ -50,10 +49,13 @@ public class RayTracer {
 		// Timing counters
 		long startTime = System.currentTimeMillis();
 	
-		Visibility visibility = new Visibility(scene);
-		visibility.judgeVector();
+		Tracer tracer = new Tracer(scene);
+		tracer.startRayTrace();
+		scene.setImage(tracer.getImage());
+//		Visibility visibility = new Visibility(scene);
+//		visibility.judgeVector();
 //		visibility.judgePoints();
-		scene.setImage(visibility.getImage());
+//		scene.setImage(visibility.getImage());
 		// Output time
 		long totalTime = (System.currentTimeMillis() - startTime);
 		System.out.println("Done.  Total rendering time: "
