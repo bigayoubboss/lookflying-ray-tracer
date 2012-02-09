@@ -50,9 +50,9 @@ public class RayTracer {
 		// Timing counters
 		long startTime = System.currentTimeMillis();
 	
-		image.setPixelColor(new Color(1,1,1), 0, 299);
 		Visibility visibility = new Visibility(scene);
-		visibility.judge();
+		visibility.judgeVector();
+//		visibility.judgePoints();
 		scene.setImage(visibility.getImage());
 		// Output time
 		long totalTime = (System.currentTimeMillis() - startTime);

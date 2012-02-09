@@ -22,7 +22,25 @@ public class Visibility {
 
 	}
 
-	public void judge() {
+	public void judgeVector(){
+		Point3 beginPoint = new Point3(preCal.cornerLB);
+		Point3 currentPoint = new Point3(beginPoint);
+		int direction = 1;
+		for(int i = 0;i < preCal.resolutionA; i++){
+			for (int j = 0; j < preCal.resolutionB; j++){
+				if(direction > 0){
+					currentPoint.scaleAdd(preCal.deltaB, preCal.vectorB);
+					judgeColor(i, j, currentPoint);
+				}else{
+					currentPoint.scaleAdd(- preCal.deltaB, preCal.vectorB);
+					judgeColor(i, preCal.resolutionB - 1 - j, currentPoint);
+				}
+			}
+			currentPoint.scaleAdd(preCal.deltaA, preCal.vectorA);
+			direction = - direction;
+		}
+	}
+	public void judgePoints() {
 		Point3 currentPointR;
 		Point3 currentPointL;
 		Point3 currentPoint;
