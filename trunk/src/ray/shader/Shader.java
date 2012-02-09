@@ -14,5 +14,5 @@ public interface Shader {
    * The material given to all surfaces unless another is specified.
    */
   public static final Shader DEFAULT_MATERIAL = new Lambertian();
-
+ 
 }

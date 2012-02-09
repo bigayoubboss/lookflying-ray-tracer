@@ -10,7 +10,11 @@ import ray.math.Vector3;
  * @author ags
  */
 public class Lambertian implements Shader {
-	
+	public double transparency = 1;
+
+	public void setTransparency(double t) {
+		transparency = t;
+	}
 	/** The color of the surface. */
 	protected final Color diffuseColor = new Color(1, 1, 1);
 	public void setDiffuseColor(Color inDiffuseColor) { diffuseColor.set(inDiffuseColor); }
