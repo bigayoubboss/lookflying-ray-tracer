@@ -25,8 +25,9 @@ public class PreCal {
 		normal = new Vector3(scene.getCamera().viewDir);
 		projCenter = new Point3(scene.getCamera().viewPoint);
 		viewUp = new Vector3(scene.getCamera().viewUp);
+		test();
 		vectorB = calVectorB(normal);// B first
-		vectorA = calVectorA(normal);// A depend on B
+		vectorA = calVectorA(normal);// A depends on B
 		Vector3 temp = new Vector3(vectorB);
 
 		System.out.println(String.format("dot = %f", temp.dot(vectorA)));
@@ -41,7 +42,14 @@ public class PreCal {
 		adjustVectors();
 		calCorner();
 	}
-
+	private void test(){
+		Vector3 temp = new Vector3();
+		temp.cross(viewUp, normal);
+		if(temp.length() <= 0){
+			System.out.println("Can't define camera!");
+			System.exit(-1);
+		}
+	}
 	private void calCorner() {
 		cornerLT = new Point3(viewCenter);
 		cornerLT.scaleAdd(-0.5 * lengthB, vectorB);
