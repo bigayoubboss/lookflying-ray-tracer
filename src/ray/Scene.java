@@ -39,5 +39,11 @@ public class Scene {
 	protected Image outputImage;
 	public Image getImage() { return this.outputImage; }
 	public void setImage(Image outputImage) { this.outputImage = outputImage; }
-
+	protected double ambient = 1.0;
+	public void setAmbient(double a){
+		ambient = a;
+	}
+	public double getAmbient(){
+		return ambient;
+	}
 }
