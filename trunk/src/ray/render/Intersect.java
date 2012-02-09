@@ -45,6 +45,23 @@ public class Intersect {
 		}
 	}
 
+	public ArrayList<Surface> isBlocked() {
+		ArrayList<Surface> blockedSurface = new ArrayList<Surface>();
+		for (Sphere sphere : spheres) {
+			double distance = intersectedWithSphere(sphere);
+			if (Tricky.larger(distance, 0, Tricky.epsilon3) && distance < 2) {
+				blockedSurface.add(sphere);
+			}
+		}
+		for (Box box : boxes) {
+			double distance = intersectedWithBox(box);
+			if (Tricky.larger(distance, 0, Tricky.epsilon2) && distance < 1) {
+				blockedSurface.add(box);
+			}
+		}
+		return blockedSurface;
+	}
+
 	/**
 	 * 
 	 * @param pointA
@@ -62,7 +79,6 @@ public class Intersect {
 					minDistance = distance;
 					candidate = sphere;
 				}
-				// System.out.println("found intersect");
 			}
 		}
 		minDistance /= 2;
@@ -209,7 +225,7 @@ public class Intersect {
 			double numerator = (coea * PointA.x + coeb * PointA.y + coec
 					* PointA.z + coed);
 			double ans = -numerator / denominator;
-			if (ans < 1)
+			if (ans <= 0)
 				return -1;
 			else
 				return ans;

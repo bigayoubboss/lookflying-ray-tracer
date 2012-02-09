@@ -28,9 +28,9 @@ public class Tracer {
 	int maxDepth = DEFAULT_DEPTH;
 
 	private void setParameter() {
-		c1 = 0.25;
-		c2 = 0.25;
-		c3 = 0.5;
+		c1 = 0.1;
+		c2 = 0.1;
+		c3 = 0.1;
 	}
 
 	private double fatt(double dl) {
@@ -94,29 +94,50 @@ public class Tracer {
 		int count = 0;
 		for (Light light : lights) {
 			sRay = new Ray(intersection, light.position);
-			// to get block for shade
-			double remain = 1.0;
-			double kd = sRay.vector.dot(normal);
-			Color sColor;
+			if (sRay.vector.dot(normal) > 0) {
+				// to get block for shade
+				double remain = getRemainLight(intersection, light.position,
+						surface);
 
-			Vector3 reflection = getReflection(normal, sRay.vector.reverse());
-			double cosa = Tricky.limited(reflection.dot(ray.vector), 1, 0);
-			double exponent = getPhongExponent(surface.getShader());
-			Color diffuseColor = getDiffuseColor(surface.getShader());
-			Color specularColor = getSpecularColor(surface.getShader());
-			Color intensity = light.intensity.multiply(fatt(sRay.length))
-					.multiply(remain);
+				double kd = sRay.vector.dot(normal);
+				Color sColor;
 
-			sColor = diffuseColor.multiply(kd);
-			if (exponent > 0) {
-				sColor.add(specularColor.multiply(ks).multiply(
-						Math.pow(cosa, exponent)));
+				Vector3 reflection = getReflection(normal,
+						sRay.vector.reverse());
+				double cosa = Tricky.limited(reflection.dot(ray.vector), 1, 0);
+				double exponent = getPhongExponent(surface.getShader());
+				Color diffuseColor = getDiffuseColor(surface.getShader());
+				Color specularColor = getSpecularColor(surface.getShader());
+				Color intensity = light.intensity.multiply(fatt(sRay.length))
+						.multiply(remain);
+
+				sColor = diffuseColor.multiply(kd);
+				if (exponent > 0) {
+					sColor.add(specularColor.multiply(ks).multiply(
+							Math.pow(cosa, exponent)));
+				}
+
+				color.add(sColor.multiply(intensity));
 			}
-			color.add(sColor.multiply(intensity));
 
+		}
+		if(depth < maxDepth){
+			
 		}
 		return Tricky.limited(color, 1, 0);
 		// return new Color(1,1,1);
+	}
+
+	private double getRemainLight(Point3 start, Point3 end, Surface own) {
+		Intersect blocked = new Intersect(start, end);
+		double remain = 1;
+		ArrayList<Surface> surfaces = blocked.isBlocked();
+		for (Surface surface : surfaces) {
+			remain *= (1 - surface.getShader().getTransparency());
+			if (remain <= 0)
+				break;
+		}
+		return remain;
 	}
 
 	private Color getDiffuseColor(Shader shader) {

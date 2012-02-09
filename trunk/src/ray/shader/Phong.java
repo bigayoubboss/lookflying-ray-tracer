@@ -15,6 +15,7 @@ public class Phong implements Shader {
 	public void setTransparency(double t) {
 		transparency = t;
 	}
+	
 
 	/** The color of the diffuse reflection. */
 	protected final Color diffuseColor = new Color(1, 1, 1);
@@ -58,5 +59,15 @@ public class Phong implements Shader {
 
 		return "phong " + diffuseColor + " " + specularColor + " " + exponent
 				+ " end";
+	}
+
+	@Override
+	public double getTransparency() {
+		return this.transparency;
+	}
+
+	@Override
+	public boolean canReflect() {
+		return true;
 	}
 }
