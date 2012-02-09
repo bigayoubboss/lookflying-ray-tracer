@@ -7,6 +7,7 @@ public class PreCal {
 	protected Vector3 normal;
 	protected Point3 projCenter;
 	protected Point3 viewCenter;
+	protected Vector3 viewUp;
 	protected Vector3 vectorA;
 	protected Vector3 vectorB;
 	protected Point3 cornerLT;
@@ -21,10 +22,14 @@ public class PreCal {
 	final protected double deltaB;
 
 	public PreCal(Scene scene) {
-		normal = scene.getCamera().viewDir;
-		projCenter = scene.getCamera().viewPoint;
-		vectorA = calVectorA(normal);
-		vectorB = calVectorB(normal);
+		normal = new Vector3(scene.getCamera().viewDir);
+		projCenter = new Point3(scene.getCamera().viewPoint);
+		viewUp = new Vector3(scene.getCamera().viewUp);
+		vectorB = calVectorB(normal);// B first
+		vectorA = calVectorA(normal);// A depend on B
+		Vector3 temp = new Vector3(vectorB);
+
+		System.out.println(String.format("dot = %f", temp.dot(vectorA)));
 		viewCenter = calViewCenter(normal, projCenter,
 				scene.getCamera().projDistance);
 		lengthA = scene.getCamera().viewHeight;
@@ -44,7 +49,7 @@ public class PreCal {
 		cornerRT = new Point3(viewCenter);
 		cornerRT.scaleAdd(0.5 * lengthB, vectorB);
 		cornerRB = new Point3(cornerRT);
-		
+
 		cornerLT.scaleAdd(0.5 * lengthA, vectorA);
 		cornerLB.scaleAdd(-0.5 * lengthA, vectorA);
 		cornerRT.scaleAdd(0.5 * lengthA, vectorA);
@@ -52,15 +57,16 @@ public class PreCal {
 	}
 
 	private Vector3 calVectorA(Vector3 norm) {
-		Vector3 temp = new Vector3(norm.x, normal.y, -norm.x * norm.x - norm.y
-				* normal.y);
+		Vector3 temp = new Vector3();
+		temp.cross(vectorB, normal);
 		temp.normalize();
 		return temp;
 
 	}
 
 	private Vector3 calVectorB(Vector3 norm) {
-		Vector3 temp = new Vector3(1, -norm.x / norm.y, 0);
+		Vector3 temp = new Vector3();
+		temp.cross(normal, viewUp);
 		temp.normalize();
 		return temp;
 	}
@@ -75,24 +81,22 @@ public class PreCal {
 	}
 
 	public String toString() {
-		return String.format("Normal Vector= %s\n" + "Project Center = %s\n"
-				+ "View Center = %s\n" + "Vector A = %s\n" + "Vector B = %s\n"
-				+ "Resolution A = %d\n" + "Resolution B = %d\n"
-				+ "ViewHeight = %f\n" + "ViewWidth = %f\n" + "Delta A = %f\n"
-				+ "Delta B = %f\n" +
-				"Corner LT = %s\n" +
-				"Corner LB = %s\n" +
-				"Corner RT = %s\n" +
-				"Corner RB = %s\n", normal.toString(), projCenter.toString(),
-				viewCenter.toString(), vectorA.toString(), vectorB.toString(),
-				resolutionA, resolutionB, lengthA, lengthB, deltaA, deltaB,cornerLT,cornerLB,cornerRT,cornerRB);
+		return String.format("Normal Vector= %s\n" + "View Up = %s\n"
+				+ "Project Center = %s\n" + "View Center = %s\n"
+				+ "Vector A = %s\n" + "Vector B = %s\n" + "Resolution A = %d\n"
+				+ "Resolution B = %d\n" + "ViewHeight = %f\n"
+				+ "ViewWidth = %f\n" + "Delta A = %f\n" + "Delta B = %f\n"
+				+ "Corner LT = %s\n" + "Corner LB = %s\n" + "Corner RT = %s\n"
+				+ "Corner RB = %s\n", normal.toString(), viewUp,
+				projCenter.toString(), viewCenter.toString(),
+				vectorA.toString(), vectorB.toString(), resolutionA,
+				resolutionB, lengthA, lengthB, deltaA, deltaB, cornerLT,
+				cornerLB, cornerRT, cornerRB);
 
 	}
 
 	private void adjustVectors() {
 
-		 vectorA.scale(-1);
-		 vectorB.scale(-1);
 		// // if (vectorA.z < 0) {
 		// //
 		// // }
