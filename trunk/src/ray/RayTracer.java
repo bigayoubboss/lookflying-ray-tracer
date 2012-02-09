@@ -28,7 +28,7 @@ public class RayTracer {
 
 			// Parse the input file
 			Scene scene = (Scene) parser.parse(inputFilename, Scene.class);
-
+			System.out.println(String.format("Ambient = %f",scene.getAmbient()));
 			// Render the scene
 			renderImage(scene);
 
