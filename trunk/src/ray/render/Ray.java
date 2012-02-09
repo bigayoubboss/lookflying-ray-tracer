@@ -16,4 +16,12 @@ public class Ray {
 		length = vector.length();
 		vector.normalize();
 	}
+	public Ray(Vector3 v, Point3 start){
+		startPoint = new Point3(start);
+		endPoint = new Point3(start);
+		endPoint.add(v);
+		vector = new Vector3(v);
+		length = vector.length();
+		vector.normalize();
+	}
 }

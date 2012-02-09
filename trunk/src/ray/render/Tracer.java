@@ -121,8 +121,20 @@ public class Tracer {
 			}
 
 		}
-		if(depth < maxDepth){
-			
+		if (depth < maxDepth) {
+			if (surface.getShader().canReflect()) {
+				Vector3 incident = new Vector3();
+				incident.sub(preCal.projCenter, intersection);
+				incident.normalize();
+				Vector3 reflection = getReflection(normal, incident);
+				rRay = new Ray(reflection, intersection);
+				rColor = trace(rRay, depth + 1);
+				color.plus(rColor.multiply(ks));
+			}
+			if (surface.getShader().getTransparency() < 1) {
+
+			}
+			// all can reflect
 		}
 		return Tricky.limited(color, 1, 0);
 		// return new Color(1,1,1);
