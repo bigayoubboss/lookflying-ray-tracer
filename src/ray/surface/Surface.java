@@ -1,6 +1,8 @@
 package ray.surface;
 
 import ray.math.Color;
+import ray.math.Point3;
+import ray.math.Vector3;
 import ray.shader.Shader;
 
 /**
@@ -15,6 +17,7 @@ public abstract class Surface {
 	protected Shader shader = Shader.DEFAULT_MATERIAL;
 	public void setShader(Shader material) { this.shader = material; }
 	public Shader getShader() { return shader; }
+	public abstract Vector3 calNormalVector(Point3 intersect) ;
 
 	
 }

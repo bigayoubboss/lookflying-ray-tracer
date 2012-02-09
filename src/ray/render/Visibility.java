@@ -1,5 +1,6 @@
 package ray.render;
 
+
 import ray.Image;
 import ray.Scene;
 import ray.math.Color;
@@ -7,6 +8,7 @@ import ray.math.Point3;
 import ray.shader.Lambertian;
 import ray.shader.Phong;
 import ray.shader.Shader;
+import ray.surface.Box;
 import ray.surface.Surface;
 
 public class Visibility {
@@ -66,7 +68,9 @@ public class Visibility {
 		Surface visible = cur.isIntersected();
 		if (visible != null) {
 			// System.out.print(String.format("[%d,%d]", i,j));
-
+			if(visible.getClass().equals(Box.class)){
+				System.out.println(String.format("%s %s", cur.pointIntersect,((Box)visible).calNormalVector(cur.pointIntersect)));
+			}
 			tempImage.setPixelColor(getShaderColor(visible.getShader()), j, i);
 
 		} else {

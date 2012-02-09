@@ -20,6 +20,7 @@ public class PreCal {
 	final protected double lengthB;
 	final protected double deltaA;
 	final protected double deltaB;
+	final protected Color backgroundColor;
 
 	public PreCal(Scene scene) {
 		normal = new Vector3(scene.getCamera().viewDir);
@@ -29,8 +30,7 @@ public class PreCal {
 		vectorB = calVectorB(normal);// B first
 		vectorA = calVectorA(normal);// A depends on B
 		Vector3 temp = new Vector3(vectorB);
-
-		System.out.println(String.format("dot = %f", temp.dot(vectorA)));
+		
 		viewCenter = calViewCenter(normal, projCenter,
 				scene.getCamera().projDistance);
 		lengthA = scene.getCamera().viewHeight;
@@ -39,17 +39,20 @@ public class PreCal {
 		resolutionB = scene.getImage().width;
 		deltaA = lengthA / resolutionA;
 		deltaB = lengthB / resolutionB;
+		backgroundColor = new Color(scene.getBackgroundColor());
 		adjustVectors();
 		calCorner();
 	}
-	private void test(){
+
+	private void test() {
 		Vector3 temp = new Vector3();
 		temp.cross(viewUp, normal);
-		if(temp.length() <= 0){
+		if (temp.length() <= 0) {
 			System.out.println("Can't define camera!");
 			System.exit(-1);
 		}
 	}
+
 	private void calCorner() {
 		cornerLT = new Point3(viewCenter);
 		cornerLT.scaleAdd(-0.5 * lengthB, vectorB);
@@ -95,11 +98,11 @@ public class PreCal {
 				+ "Resolution B = %d\n" + "ViewHeight = %f\n"
 				+ "ViewWidth = %f\n" + "Delta A = %f\n" + "Delta B = %f\n"
 				+ "Corner LT = %s\n" + "Corner LB = %s\n" + "Corner RT = %s\n"
-				+ "Corner RB = %s\n", normal.toString(), viewUp,
-				projCenter.toString(), viewCenter.toString(),
-				vectorA.toString(), vectorB.toString(), resolutionA,
-				resolutionB, lengthA, lengthB, deltaA, deltaB, cornerLT,
-				cornerLB, cornerRT, cornerRB);
+				+ "Corner RB = %s\n" + "Background Color = %s\n",
+				normal.toString(), viewUp, projCenter.toString(),
+				viewCenter.toString(), vectorA.toString(), vectorB.toString(),
+				resolutionA, resolutionB, lengthA, lengthB, deltaA, deltaB,
+				cornerLT, cornerLB, cornerRT, cornerRB, backgroundColor);
 
 	}
 

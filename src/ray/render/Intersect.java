@@ -10,6 +10,7 @@ public class Intersect {
 	static ArrayList<Box> boxes = new ArrayList<Box>();
 	Point3 PointA;
 	Point3 PointB;
+	Point3 pointIntersect = null;
 	double A;
 	double dx, dy, dz;
 
@@ -19,6 +20,15 @@ public class Intersect {
 		dx = PointB.x - PointA.x;
 		dy = PointB.y - PointA.y;
 		dz = PointB.z - PointA.z;
+		A = dx * dx + dy * dy + dz * dz;
+	}
+
+	public Intersect(Ray ray) {
+		PointA = ray.startPoint;
+		PointB = ray.endPoint;
+		dx = ray.vector.x;
+		dy = ray.vector.y;
+		dz = ray.vector.z;
 		A = dx * dx + dy * dy + dz * dz;
 	}
 
@@ -56,14 +66,18 @@ public class Intersect {
 			}
 		}
 		minDistance /= 2;
-		for(Box box:boxes){
+		for (Box box : boxes) {
 			double distance = intersectedWithBox(box);
-			if(distance > -1){
-				if(distance < minDistance){
+			if (distance > -1) {
+				if (distance < minDistance) {
 					minDistance = distance;
 					candidate = box;
 				}
 			}
+		}
+		if (candidate != null) {
+			pointIntersect = new Point3(PointA.x + minDistance * dx, PointA.y
+					+ minDistance * dy, PointA.z + minDistance * dz);
 		}
 		return candidate;
 	}
@@ -112,39 +126,39 @@ public class Intersect {
 		zmax = box.getMaxPt().z;
 		double t;
 		if ((t = intersectWithBoxSurface(0, xmin, ymax, ymin, zmax, zmin)) > 0) {
-			if(t < minDistance){
+			if (t < minDistance) {
 				minDistance = t;
 			}
 		}
 		if ((t = intersectWithBoxSurface(0, xmax, ymax, ymin, zmax, zmin)) > 0) {
-			if(t < minDistance){
+			if (t < minDistance) {
 				minDistance = t;
 			}
 		}
 		if ((t = intersectWithBoxSurface(1, ymin, xmax, xmin, zmax, zmin)) > 0) {
-			if(t < minDistance){
+			if (t < minDistance) {
 				minDistance = t;
 			}
 		}
 		if ((t = intersectWithBoxSurface(1, ymax, xmax, xmin, zmax, zmin)) > 0) {
-			if(t < minDistance){
+			if (t < minDistance) {
 				minDistance = t;
 			}
 		}
 		if ((t = intersectWithBoxSurface(2, zmin, xmax, xmin, ymax, ymin)) > 0) {
-			if(t < minDistance){
+			if (t < minDistance) {
 				minDistance = t;
 			}
 		}
 		if ((t = intersectWithBoxSurface(2, zmax, xmax, xmin, ymax, ymin)) > 0) {
-			if(t < minDistance){
+			if (t < minDistance) {
 				minDistance = t;
 			}
 		}
 
-		if(minDistance == Double.MAX_VALUE){
+		if (minDistance == Double.MAX_VALUE) {
 			return -1;
-		}else{
+		} else {
 			return minDistance;
 		}
 	}
@@ -155,7 +169,7 @@ public class Intersect {
 		double x, y, z;
 		switch (side) {
 		case 0:
-			t = intersectWithPlane(1, 0, 0, value);
+			t = intersectWithPlane(1, 0, 0, -value);
 			if (t > 0) {
 				y = PointA.y + t * dy;
 				z = PointA.z + t * dz;
@@ -165,7 +179,7 @@ public class Intersect {
 			}
 			break;
 		case 1:
-			t = intersectWithPlane(0, 1, 0, value);
+			t = intersectWithPlane(0, 1, 0, -value);
 			if (t > 0) {
 				x = PointA.x + t * dx;
 				z = PointA.z + t * dz;
@@ -175,7 +189,7 @@ public class Intersect {
 			}
 			break;
 		case 2:
-			t = intersectWithPlane(0, 0, 1, value);
+			t = intersectWithPlane(0, 0, 1, -value);
 			if (t > 0) {
 				x = PointA.x + t * dx;
 				y = PointA.y + t * dy;

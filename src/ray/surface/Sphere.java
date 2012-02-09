@@ -1,6 +1,7 @@
 package ray.surface;
 
 import ray.math.Point3;
+import ray.math.Vector3;
 
 /**
  * Represents a sphere as a center and a radius.
@@ -31,6 +32,13 @@ public class Sphere extends Surface {
 	public String toString() {
 		
 		return "sphere " + center + " " + radius + " " + shader + " end";
+	}
+	@Override
+	public Vector3 calNormalVector(Point3 intersect) {
+		Vector3 ans = new Vector3();
+		ans.sub(intersect, center);
+		ans.normalize();
+		return ans;
 	}
 	
 }

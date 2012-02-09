@@ -174,5 +174,10 @@ public class Vector3 extends Tuple3 {
     this.z += scale * vector.z;
 
   }
+  public Vector3 reverse(){
+	  Vector3 ans = new Vector3(this);
+	  ans.scale(-1);
+	  return ans;
+  }
 
 }

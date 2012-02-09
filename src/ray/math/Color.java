@@ -95,6 +95,20 @@ public class Color {
 		this.b *= rhs;
 	}
 	
+	public Color multiply(double op1){
+		Color ans = new Color(this);
+		ans.scale(op1);
+		return ans;
+	}
+	
+	public Color multiply(Color op1){
+		Color ans = new Color(this);
+		ans.r *= op1.r;
+		ans.g *= op1.g;
+		ans.b *= op1.b;
+		return ans;
+	}
+	
 	/**
 	 * Sets this color to the pairwise sum of this color and ths.
 	 * @param rhs the input color
@@ -104,6 +118,12 @@ public class Color {
 		this.r += rhs.r;
 		this.g += rhs.g;
 		this.b += rhs.b;
+	}
+	
+	public Color plus(Color op1){
+		Color ans = new Color(this);
+		ans.add(op1);
+		return ans;
 	}
 	
 	/**
