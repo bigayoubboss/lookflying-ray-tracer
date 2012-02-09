@@ -30,5 +30,13 @@ public class Lambertian implements Shader {
 		
 		return "lambertian: " + diffuseColor;
 	}
+	@Override
+	public double getTransparency() {
+		return this.transparency;
+	}
+	@Override
+	public boolean canReflect() {
+		return true;
+	}
 	
 }
