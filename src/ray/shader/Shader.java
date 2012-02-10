@@ -16,4 +16,6 @@ public interface Shader {
   public static final Shader DEFAULT_MATERIAL = new Lambertian();
   public abstract double getTransparency();
   public abstract boolean canReflect();
+  public abstract double getReflectionCoe();
+  public abstract double getRefractionCoe();
 }

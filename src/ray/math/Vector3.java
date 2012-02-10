@@ -179,5 +179,10 @@ public class Vector3 extends Tuple3 {
 	  ans.scale(-1);
 	  return ans;
   }
+  public Vector3 multiply(double op1){
+	  Vector3 ans = new Vector3(this);
+	  ans.scale(op1);
+	  return ans;
+  }
 
 }
