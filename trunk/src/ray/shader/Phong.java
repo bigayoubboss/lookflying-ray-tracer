@@ -11,12 +11,18 @@ import ray.math.Vector3;
  */
 public class Phong implements Shader {
 	public double transparency = 1;
-
+	public double refractionCoe = 1;
+	public double reflectionCoe = 0.5;
+	
 	public void setTransparency(double t) {
 		transparency = t;
 	}
-	
-
+	public void setRefractionCoe(double r){
+		refractionCoe = r;
+	}
+	public void setReflectionCoe(double r){
+		reflectionCoe = r;
+	}
 	/** The color of the diffuse reflection. */
 	protected final Color diffuseColor = new Color(1, 1, 1);
 
@@ -69,5 +75,14 @@ public class Phong implements Shader {
 	@Override
 	public boolean canReflect() {
 		return true;
+	}
+
+	@Override
+	public double getRefractionCoe() {
+		return refractionCoe;
+	}
+	@Override
+	public double getReflectionCoe() {
+		return reflectionCoe;
 	}
 }

@@ -19,7 +19,6 @@ public class Tracer {
 	public static double maxcosa = -1;
 	public static final int DEFAULT_DEPTH = 4;
 	double ka = 1;
-	double ks = 1;
 	double c1, c2, c3;
 	Image image;
 	PreCal preCal;
@@ -91,7 +90,7 @@ public class Tracer {
 		Color color = new Color(ambientColor.multiply(ka));
 		Ray rRay, tRay, sRay;
 		Color rColor, tColor;
-		int count = 0;
+		double ks = surface.getShader().getReflectionCoe();
 		for (Light light : lights) {
 			sRay = new Ray(intersection, light.position);
 			if (sRay.vector.dot(normal) > 0) {
@@ -116,25 +115,36 @@ public class Tracer {
 					sColor.add(specularColor.multiply(ks).multiply(
 							Math.pow(cosa, exponent)));
 				}
-
+//				sColor.scale(surface.getShader().getTransparency());
 				color.add(sColor.multiply(intensity));
 			}
 
 		}
 		if (depth < maxDepth) {
+			// all can reflect
 			if (surface.getShader().canReflect()) {
 				Vector3 incident = new Vector3();
-				incident.sub(preCal.projCenter, intersection);
+				incident.sub(ray.startPoint, intersection);
 				incident.normalize();
 				Vector3 reflection = getReflection(normal, incident);
 				rRay = new Ray(reflection, intersection);
 				rColor = trace(rRay, depth + 1);
-				color.plus(rColor.multiply(ks));
+				color.add(rColor.multiply(ks));
 			}
+			
 			if (surface.getShader().getTransparency() < 1) {
-
+				double ni, nt, op1;
+				ni = ray.ni;
+				nt = surface.getShader().getRefractionCoe();
+				if((op1 = canTotalReflection(normal, ray.vector.reverse(), ni, nt)) >=0){
+				
+					Vector3 refraction = gerRefraction(normal, ray.vector.reverse(), ni, nt, op1);
+					tRay = new Ray(refraction, intersection, nt);
+					tColor = trace(tRay, depth + 1);
+					color.add(tColor.multiply(1 - surface.getShader().getTransparency()));
+				}
 			}
-			// all can reflect
+			 
 		}
 		return Tricky.limited(color, 1, 0);
 		// return new Color(1,1,1);
@@ -175,6 +185,7 @@ public class Tracer {
 		return -1;
 	}
 
+	// need unit vector
 	private Vector3 getReflection(Vector3 normal, Vector3 light) {
 		Vector3 reflection = new Vector3(normal);
 		reflection.scale(2 * normal.dot(light));
@@ -182,7 +193,25 @@ public class Tracer {
 		return reflection;
 	}
 
+	// need unit vector, all point away from intersection
+	private double canTotalReflection(Vector3 normal, Vector3 incident,
+			double ni, double nt) {
+		double nr = ni / nt;
+		return 1 - nr * nr * (1 - normal.dot(incident))
+				* (1 - normal.dot(incident));
+	}
+
+	private Vector3 gerRefraction(Vector3 normal, Vector3 incident, double ni,
+			double nt, double op1) {
+		double nr = ni / nt;
+		Vector3 refraction = new Vector3(normal);
+		refraction.scale(nr * normal.dot(incident) - Math.sqrt(op1));
+		refraction.sub(incident.multiply(nr));
+		return refraction;
+	}
+
 	public Image getImage() {
 		return image;
 	}
+
 }
