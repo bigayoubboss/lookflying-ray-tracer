@@ -173,56 +173,72 @@ public class Intersect {
 		triangles.add(tri4);
 	}
 
+	private double intersectedWithRound(double coea, double coeb, double coec,
+			double coed, Point3 center, double radius) {
+		double t;
+		double a, b, c;
+		a = center.x;
+		b = center.y;
+		c = center.z;
+		if ((t = intersectedWithPlane(coea, coeb, coec, coed)) > -1) {
+			double x = t * dx + PointA.x;
+			double y = t * dy + PointA.y;
+			double z = t * dz + PointA.z;
+			if ((x - a) * (x - a) + (y - b) * (y - b) + (z - c) * (z - c) <= radius * radius) {
+				return t;
+			}
+		}
+		return -1;
+	}
+
 	private double intersectedWithCylinder(Cylinder cylinder) {
 		double a, b, c, z, Delta;
 		double sqrtDelta;
 		double coea, coeb, r, h;
-		double t;
+		double t1, t2, t3, t = Double.MAX_VALUE;
 		coea = cylinder.getCenter1().x;
 		coeb = cylinder.getCenter1().y;
+
 		r = cylinder.getRadius();
 		h = cylinder.getHeight();
-		if ((t = intersectedWithPlane(0, 0, 1, -cylinder.getCenter1().z)) > -1) {
-			double x = t * dx + PointA.x;
-			double y = t * dy + PointA.y;
-			if ((x - coea) * (x - coea) + (y - coeb) * (y - coeb) <= cylinder
-					.getRadius() * cylinder.getRadius()) {
-				return t;
-			}
-		} 
-		if ((t = intersectedWithPlane(0, 0, 1, -cylinder.getCenter1().z
-				- h)) > -1) {
-			double x = t * dx + PointA.x;
-			double y = t * dy + PointA.y;
-			if ((x - coea) * (x - coea) + (y - coeb) * (y - coeb) <= cylinder
-					.getRadius() * cylinder.getRadius()) {
-				return t;
-			}
-		}
+		t1 = intersectedWithRound(0, 0, 1, -cylinder.getCenter1().z,
+				cylinder.getCenter1(), r);
+		if (t1 > -1)
+			t = t1;
+		t2 = intersectedWithRound(0, 0, 1, -cylinder.getCenter1().z - h,
+				new Point3(coea, coeb, cylinder.getCenter1().z + h), r);
+		if (t2 > -1 && t2 < t)
+			t = t2;
 		a = dx * dx + dy * dy;
 		b = 2 * (dx * (PointA.x - coea) + dy * (PointA.y - coeb));
 		c = (PointA.x - coea) * (PointA.x - coea) + (PointA.y - coeb)
 				* (PointA.y - coeb) - r * r;
 		Delta = b * b - 4 * a * c;
 		if (Delta < 0) {
-			return -1;
+
 		} else {
 			sqrtDelta = Math.sqrt(Delta);
 			double ans1 = (-b + sqrtDelta) / a;
 			double ans2 = (-b - sqrtDelta) / a;
 			if (ans2 > 0)
-				t = ans2 / 2;
+				t3 = ans2 / 2;
 			else if (ans1 > 0)
-				t = ans1 / 2;
+				t3 = ans1 / 2;
 			else
-				return -1;
+				t3 = -1;
+
+			if (t3 != -1) {
+				z = PointA.z + t3 * dz;
+				if (z >= cylinder.getCenter1().z
+						&& z <= cylinder.getCenter1().z + h && t3 < t) {
+					t = t3;
+				}
+			}
 		}
-		z = PointA.z + t * dz;
-		if (z >= cylinder.getCenter1().z && z <= cylinder.getCenter1().z + h) {
+		if(t != Double.MAX_VALUE)
 			return t;
-		} else {
+		else
 			return -1;
-		}
 
 	}
 

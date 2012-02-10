@@ -30,7 +30,6 @@ public class PreCal {
 		vectorB = calVectorB(normal);// B first
 		vectorA = calVectorA(normal);// A depends on B
 		Vector3 temp = new Vector3(vectorB);
-		
 		viewCenter = calViewCenter(normal, projCenter,
 				scene.getCamera().projDistance);
 		lengthA = scene.getCamera().viewHeight;
@@ -43,6 +42,27 @@ public class PreCal {
 		adjustVectors();
 		calCorner();
 	}
+	public PreCal(Scene scene, int anti) {
+		normal = new Vector3(scene.getCamera().viewDir);
+		projCenter = new Point3(scene.getCamera().viewPoint);
+		viewUp = new Vector3(scene.getCamera().viewUp);
+		test();
+		vectorB = calVectorB(normal);// B first
+		vectorA = calVectorA(normal);// A depends on B
+		Vector3 temp = new Vector3(vectorB);
+		viewCenter = calViewCenter(normal, projCenter,
+				scene.getCamera().projDistance);
+		lengthA = scene.getCamera().viewHeight;
+		lengthB = scene.getCamera().viewWidth;
+		resolutionA = scene.getImage().height * anti;
+		resolutionB = scene.getImage().width * anti;
+		deltaA = lengthA / resolutionA;
+		deltaB = lengthB / resolutionB;
+		backgroundColor = new Color(scene.getBackgroundColor());
+		adjustVectors();
+		calCorner();
+	}
+
 
 	private void test() {
 		Vector3 temp = new Vector3();
