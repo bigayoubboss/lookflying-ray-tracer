@@ -9,9 +9,12 @@ public class Intersect {
 	static ArrayList<Sphere> spheres = new ArrayList<Sphere>();
 	static ArrayList<Box> boxes = new ArrayList<Box>();
 	static ArrayList<Triangle> triangles = new ArrayList<Triangle>();
+	static ArrayList<Cylinder> cylinders = new ArrayList<Cylinder>();
 	Point3 PointA;
 	Point3 PointB;
 	Point3 pointIntersect = null;
+	Vector3 light;
+	Vector3 triangleNormal = null;
 	double A;
 	double dx, dy, dz;
 
@@ -22,6 +25,7 @@ public class Intersect {
 		dy = PointB.y - PointA.y;
 		dz = PointB.z - PointA.z;
 		A = dx * dx + dy * dy + dz * dz;
+		light = new Vector3(dx, dy, dz);
 	}
 
 	public Intersect(Ray ray) {
@@ -31,12 +35,14 @@ public class Intersect {
 		dy = ray.vector.y;
 		dz = ray.vector.z;
 		A = dx * dx + dy * dy + dz * dz;
+		light = ray.vector;
 	}
 
 	public static void setSurfaces(ArrayList<Object> surfaces) {
 		spheres.clear();
 		boxes.clear();
 		triangles.clear();
+		cylinders.clear();
 		for (Object surface : surfaces) {
 			if (surface.getClass().equals(Sphere.class)) {
 				spheres.add((Sphere) surface);
@@ -45,6 +51,10 @@ public class Intersect {
 				boxes.add((Box) surface);
 			} else if (surface.getClass().equals(Triangle.class)) {
 				triangles.add((Triangle) surface);
+			} else if (surface.getClass().equals(Tetrahedron.class)) {
+				processWithTetrahedron((Tetrahedron) surface);
+			} else if (surface.getClass().equals(Cylinder.class)) {
+				cylinders.add((Cylinder) surface);
 			}
 
 		}
@@ -68,6 +78,12 @@ public class Intersect {
 			double distance = intersectedWithTriangle(triangle);
 			if (Tricky.larger(distance, 0, Tricky.epsilon2) && distance < 1) {
 				blockedSurface.add(triangle);
+			}
+		}
+		for (Cylinder cylinder : cylinders) {
+			double distance = intersectedWithCylinder(cylinder);
+			if (Tricky.larger(distance, 0, Tricky.epsilon2) && distance < 1) {
+				blockedSurface.add(cylinder);
 			}
 		}
 		return blockedSurface;
@@ -108,6 +124,19 @@ public class Intersect {
 				if (distance < minDistance) {
 					minDistance = distance;
 					candidate = triangle;
+					if (triangleNormal == null) {
+						triangleNormal = new Vector3();
+					}
+					triangleNormal.set(triangle.calNormalVector(null));
+				}
+			}
+		}
+		for (Cylinder cylinder : cylinders) {
+			double distance = intersectedWithCylinder(cylinder);
+			if (distance > -1) {
+				if (distance < minDistance) {
+					minDistance = distance;
+					candidate = cylinder;
 				}
 			}
 		}
@@ -120,14 +149,95 @@ public class Intersect {
 		return candidate;
 	}
 
+	private static void processWithTetrahedron(Tetrahedron tetrahedron) {
+		Triangle tri1 = new Triangle(), tri2 = new Triangle(), tri3 = new Triangle(), tri4 = new Triangle();
+		tri1.setShader(tetrahedron.getShader());
+		tri1.setVertex1(tetrahedron.getVertexTop());
+		tri1.setVertex2(tetrahedron.getVertex1());
+		tri1.setVertex3(tetrahedron.getVertex2());
+		tri2.setShader(tetrahedron.getShader());
+		tri2.setVertex1(tetrahedron.getVertexTop());
+		tri2.setVertex2(tetrahedron.getVertex2());
+		tri2.setVertex3(tetrahedron.getVertex3());
+		tri3.setShader(tetrahedron.getShader());
+		tri3.setVertex1(tetrahedron.getVertexTop());
+		tri3.setVertex2(tetrahedron.getVertex3());
+		tri3.setVertex3(tetrahedron.getVertex1());
+		tri4.setShader(tetrahedron.getShader());
+		tri4.setVertex1(tetrahedron.getVertex1());
+		tri4.setVertex2(tetrahedron.getVertex3());
+		tri4.setVertex3(tetrahedron.getVertex2());
+		triangles.add(tri1);
+		triangles.add(tri2);
+		triangles.add(tri3);
+		triangles.add(tri4);
+	}
+
+	private double intersectedWithCylinder(Cylinder cylinder) {
+		double a, b, c, z, Delta;
+		double sqrtDelta;
+		double coea, coeb, r, h;
+		double t;
+		coea = cylinder.getCenter1().x;
+		coeb = cylinder.getCenter1().y;
+		r = cylinder.getRadius();
+		h = cylinder.getHeight();
+		if ((t = intersectedWithPlane(0, 0, 1, -cylinder.getCenter1().z)) > -1) {
+			double x = t * dx + PointA.x;
+			double y = t * dy + PointA.y;
+			if ((x - coea) * (x - coea) + (y - coeb) * (y - coeb) <= cylinder
+					.getRadius() * cylinder.getRadius()) {
+				return t;
+			}
+		} 
+		if ((t = intersectedWithPlane(0, 0, 1, -cylinder.getCenter1().z
+				- h)) > -1) {
+			double x = t * dx + PointA.x;
+			double y = t * dy + PointA.y;
+			if ((x - coea) * (x - coea) + (y - coeb) * (y - coeb) <= cylinder
+					.getRadius() * cylinder.getRadius()) {
+				return t;
+			}
+		}
+		a = dx * dx + dy * dy;
+		b = 2 * (dx * (PointA.x - coea) + dy * (PointA.y - coeb));
+		c = (PointA.x - coea) * (PointA.x - coea) + (PointA.y - coeb)
+				* (PointA.y - coeb) - r * r;
+		Delta = b * b - 4 * a * c;
+		if (Delta < 0) {
+			return -1;
+		} else {
+			sqrtDelta = Math.sqrt(Delta);
+			double ans1 = (-b + sqrtDelta) / a;
+			double ans2 = (-b - sqrtDelta) / a;
+			if (ans2 > 0)
+				t = ans2 / 2;
+			else if (ans1 > 0)
+				t = ans1 / 2;
+			else
+				return -1;
+		}
+		z = PointA.z + t * dz;
+		if (z >= cylinder.getCenter1().z && z <= cylinder.getCenter1().z + h) {
+			return t;
+		} else {
+			return -1;
+		}
+
+	}
+
 	private double intersectedWithTriangle(Triangle triangle) {
 		Vector3 normal = triangle.calNormalVector(null);
+		if (light.dot(normal) >= 0)
+			return -1;
 		double a = normal.x;
 		double b = normal.y;
 		double c = normal.z;
 		double d = -(a * triangle.getVertex1().x + b * triangle.getVertex1().y + c
 				* triangle.getVertex1().z);
 		double t = intersectedWithPlane(a, b, c, d);
+		if (t < 0)
+			return -1;
 		Point3 p = new Point3(PointA.x + t * dx, PointA.y + t * dy, PointA.z
 				+ t * dz);
 		if (isInTriangle(p, triangle)) {
@@ -296,6 +406,15 @@ public class Intersect {
 			return -1;
 		}
 
+	}
+
+	public Vector3 getNormal(Surface surface) {
+		if (surface.getClass().equals(Triangle.class)) {
+			return triangleNormal;
+		} else if (surface.getClass().equals(Tetrahedron.class)) {
+			return triangleNormal;
+		}
+		return null;
 	}
 
 }

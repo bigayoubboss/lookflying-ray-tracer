@@ -79,7 +79,10 @@ public class Tracer {
 		Intersect intersect = new Intersect(ray);
 		Surface surface;
 		if ((surface = intersect.isIntersected()) != null) {
-			Vector3 normal = surface.calNormalVector(intersect.pointIntersect);
+			Vector3 normal;
+			if( (normal = intersect.getNormal(surface)) == null){
+				normal= surface.calNormalVector(intersect.pointIntersect);
+			}
 			return shade(surface, ray, intersect.pointIntersect, normal, depth);
 		}
 		return preCal.backgroundColor;
@@ -129,7 +132,8 @@ public class Tracer {
 				Vector3 reflection = getReflection(normal, incident);
 				rRay = new Ray(reflection, intersection);
 				rColor = trace(rRay, depth + 1);
-				color.add(rColor.multiply(ks));
+				rColor.scale(ks);
+				color.add(rColor);
 			}
 			
 			if (surface.getShader().getTransparency() < 1) {
