@@ -8,6 +8,7 @@ import ray.math.*;
 public class Intersect {
 	static ArrayList<Sphere> spheres = new ArrayList<Sphere>();
 	static ArrayList<Box> boxes = new ArrayList<Box>();
+	static ArrayList<Triangle> triangles = new ArrayList<Triangle>();
 	Point3 PointA;
 	Point3 PointB;
 	Point3 pointIntersect = null;
@@ -35,13 +36,17 @@ public class Intersect {
 	public static void setSurfaces(ArrayList<Object> surfaces) {
 		spheres.clear();
 		boxes.clear();
+		triangles.clear();
 		for (Object surface : surfaces) {
 			if (surface.getClass().equals(Sphere.class)) {
 				spheres.add((Sphere) surface);
 				// System.out.println("this is a sphere.");
 			} else if (surface.getClass().equals(Box.class)) {
 				boxes.add((Box) surface);
+			} else if (surface.getClass().equals(Triangle.class)) {
+				triangles.add((Triangle) surface);
 			}
+
 		}
 	}
 
@@ -57,6 +62,12 @@ public class Intersect {
 			double distance = intersectedWithBox(box);
 			if (Tricky.larger(distance, 0, Tricky.epsilon2) && distance < 1) {
 				blockedSurface.add(box);
+			}
+		}
+		for (Triangle triangle : triangles) {
+			double distance = intersectedWithTriangle(triangle);
+			if (Tricky.larger(distance, 0, Tricky.epsilon2) && distance < 1) {
+				blockedSurface.add(triangle);
 			}
 		}
 		return blockedSurface;
@@ -91,11 +102,63 @@ public class Intersect {
 				}
 			}
 		}
+		for (Triangle triangle : triangles) {
+			double distance = intersectedWithTriangle(triangle);
+			if (distance > -1) {
+				if (distance < minDistance) {
+					minDistance = distance;
+					candidate = triangle;
+				}
+			}
+		}
 		if (candidate != null) {
-			pointIntersect = new Point3(PointA.x + minDistance * dx, PointA.y
-					+ minDistance * dy, PointA.z + minDistance * dz);
+			if (pointIntersect == null)
+				pointIntersect = new Point3(PointA.x + minDistance * dx,
+						PointA.y + minDistance * dy, PointA.z + minDistance
+								* dz);
 		}
 		return candidate;
+	}
+
+	private double intersectedWithTriangle(Triangle triangle) {
+		Vector3 normal = triangle.calNormalVector(null);
+		double a = normal.x;
+		double b = normal.y;
+		double c = normal.z;
+		double d = -(a * triangle.getVertex1().x + b * triangle.getVertex1().y + c
+				* triangle.getVertex1().z);
+		double t = intersectedWithPlane(a, b, c, d);
+		Point3 p = new Point3(PointA.x + t * dx, PointA.y + t * dy, PointA.z
+				+ t * dz);
+		if (isInTriangle(p, triangle)) {
+			pointIntersect = p;
+		} else {
+			t = -1;
+		}
+		return t;
+	}
+
+	private boolean isInTriangle(Point3 p, Triangle triangle) {
+		Vector3 vector1p = new Vector3(triangle.getVertex1(), p);
+		Vector3 vector2p = new Vector3(triangle.getVertex2(), p);
+		Vector3 vector3p = new Vector3(triangle.getVertex3(), p);
+		Vector3 vector12 = new Vector3(triangle.getVertex1(),
+				triangle.getVertex2());
+		Vector3 vector23 = new Vector3(triangle.getVertex2(),
+				triangle.getVertex3());
+		Vector3 vector31 = new Vector3(triangle.getVertex3(),
+				triangle.getVertex1());
+		Vector3 test1 = new Vector3();
+		test1.cross(vector1p, vector12);
+
+		Vector3 test2 = new Vector3();
+		test2.cross(vector2p, vector23);
+		Vector3 test3 = new Vector3();
+		test3.cross(vector3p, vector31);
+		if (test1.dot(test2) >= 0 && test1.dot(test3) >= 0)
+			return true;
+		else
+			return false;
 	}
 
 	private double intersectedWithSphere(Sphere sphere) {
@@ -185,7 +248,7 @@ public class Intersect {
 		double x, y, z;
 		switch (side) {
 		case 0:
-			t = intersectWithPlane(1, 0, 0, -value);
+			t = intersectedWithPlane(1, 0, 0, -value);
 			if (t > 0) {
 				y = PointA.y + t * dy;
 				z = PointA.z + t * dz;
@@ -195,7 +258,7 @@ public class Intersect {
 			}
 			break;
 		case 1:
-			t = intersectWithPlane(0, 1, 0, -value);
+			t = intersectedWithPlane(0, 1, 0, -value);
 			if (t > 0) {
 				x = PointA.x + t * dx;
 				z = PointA.z + t * dz;
@@ -205,7 +268,7 @@ public class Intersect {
 			}
 			break;
 		case 2:
-			t = intersectWithPlane(0, 0, 1, -value);
+			t = intersectedWithPlane(0, 0, 1, -value);
 			if (t > 0) {
 				x = PointA.x + t * dx;
 				y = PointA.y + t * dy;
@@ -218,7 +281,7 @@ public class Intersect {
 		return -1;
 	}
 
-	private double intersectWithPlane(double coea, double coeb, double coec,
+	private double intersectedWithPlane(double coea, double coeb, double coec,
 			double coed) {
 		double denominator = (coea * dx + coeb * dy + coec * dz);
 		if (denominator != 0) {
