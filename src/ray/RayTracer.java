@@ -61,5 +61,6 @@ public class RayTracer {
 		System.out.println("Done.  Total rendering time: "
 				+ (totalTime / 1000.0) + " seconds");
 	}
+	
 
 }

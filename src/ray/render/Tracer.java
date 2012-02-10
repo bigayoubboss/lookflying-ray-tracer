@@ -17,9 +17,10 @@ import ray.surface.Surface;
 
 public class Tracer {
 	public static double maxcosa = -1;
-	public static final int DEFAULT_DEPTH = 4;
+	public static final int DEFAULT_DEPTH = 3;
 	double ka = 1;
 	double c1, c2, c3;
+	int anti_aliasing = 1;
 	Image image;
 	PreCal preCal;
 	Color ambientColor;
@@ -27,9 +28,9 @@ public class Tracer {
 	int maxDepth = DEFAULT_DEPTH;
 
 	private void setParameter() {
-		c1 = 0.1;
-		c2 = 0.1;
-		c3 = 0.1;
+		c1 = 0.25;
+		c2 = 0.25;
+		c3 = 0.2;
 	}
 
 	private double fatt(double dl) {
@@ -47,6 +48,14 @@ public class Tracer {
 	public Tracer(Scene scene) {
 		preCal = new PreCal(scene);
 		image = scene.getImage();
+		Intersect.setSurfaces(scene.getSurfaces());
+		lights.addAll(scene.getLights());
+		ambientColor = new Color(scene.getAmbientColor());
+
+	}
+	public Tracer(Scene scene, int anti) {
+		preCal = new PreCal(scene, anti);
+		image = new Image(preCal.resolutionB, preCal.resolutionA);
 		Intersect.setSurfaces(scene.getSurfaces());
 		lights.addAll(scene.getLights());
 		ambientColor = new Color(scene.getAmbientColor());
@@ -215,6 +224,7 @@ public class Tracer {
 	}
 
 	public Image getImage() {
+		
 		return image;
 	}
 

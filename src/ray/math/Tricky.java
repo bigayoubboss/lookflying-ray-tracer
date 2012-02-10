@@ -3,7 +3,7 @@ package ray.math;
 public class Tricky {
 	public static double epsilon = 0.0000000000005;
 	public static double epsilon2 = 0.000000001;
-	public static double epsilon3 = 0.00001;
+	public static double epsilon3 = 0.001;
 
 	public static boolean equals(double opt1, double opt2) {
 		return Math.abs(opt1 - opt2) < epsilon;
