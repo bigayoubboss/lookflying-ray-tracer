@@ -7,15 +7,18 @@ public class Triangle extends Surface {
 	Point3 vertex1 = new Point3();
 	Point3 vertex2 = new Point3();
 	Point3 vertex3 = new Point3();
+	Vector3 normal = null;
 	
 	@Override
 	public Vector3 calNormalVector(Point3 intersect) {
-		Vector3 vector12 = new Vector3(vertex1, vertex2);
-		Vector3 vector23 = new Vector3(vertex2, vertex3);
-		Vector3 ans =new Vector3();
-		ans.cross(vector12,vector23);
-		ans.normalize();
-		return ans;
+		if(normal == null){
+			Vector3 vector12 = new Vector3(vertex1, vertex2);
+			Vector3 vector23 = new Vector3(vertex2, vertex3);
+			normal =new Vector3();
+			normal.cross(vector12,vector23);
+			normal.normalize();
+		}
+		return normal;
 	}
 	public void setVertex1(Point3 v){
 		vertex1.set(v);

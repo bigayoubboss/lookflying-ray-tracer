@@ -29,6 +29,7 @@ public class GenerateAll {
 				 Scene.class);
 				//
 				// // Render the scene
+				System.out.print("Rending " + f.getName() + "\t");
 				RayTracer.renderImage(scene);
 				//
 				// // Write the image out

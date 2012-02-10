@@ -1,6 +1,7 @@
 package ray.surface;
 
 import ray.math.Point3;
+import ray.math.Tricky;
 import ray.math.Vector3;
 //simple cylinder
 public class Cylinder extends Surface{
@@ -11,8 +12,14 @@ public class Cylinder extends Surface{
 	
 	@Override
 	public Vector3 calNormalVector(Point3 intersect) {
-		// TODO Auto-generated method stub
-		return null;
+		if(Tricky.equals(intersect.z, center1.z)){
+			return new Vector3(0, 0, -1);
+		}else if(Tricky.equals(intersect.z, center1.z + height)){
+			return new Vector3(0, 0, 1);
+		}else{
+			Vector3 ans = new Vector3(intersect.x - center1.x, intersect.y - center1.y,  0);
+			return ans;
+		}
 	}
 
 	public Point3 getCenter1() {
@@ -44,6 +51,7 @@ public class Cylinder extends Surface{
 	}
 
 	public void setHeight(double height) {
+		
 		this.height = height;
 	}
 	
