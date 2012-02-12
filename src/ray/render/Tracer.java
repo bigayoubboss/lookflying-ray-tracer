@@ -149,6 +149,10 @@ public class Tracer {
 				double ni, nt, op1;
 				ni = ray.ni;
 				nt = surface.getShader().getRefractionCoe();
+				if(normal.dot(ray.vector) > 0){
+					normal.scale(-1);
+					nt = 1;
+				}
 				if((op1 = canTotalReflection(normal, ray.vector.reverse(), ni, nt)) >=0){
 				
 					Vector3 refraction = gerRefraction(normal, ray.vector.reverse(), ni, nt, op1);
