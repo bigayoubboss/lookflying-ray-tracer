@@ -7,7 +7,7 @@ import ray.RayTracer;
 import ray.Scene;
 
 public class GenerateAll {
-	static String dir = "C:\\Users\\Feng\\Desktop\\scenes";
+	static String dir = ".";
 
 	/**
 	 * @param args
