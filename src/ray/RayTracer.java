@@ -23,7 +23,7 @@ public class RayTracer {
 
 			// Get the input/output filenames.
 			String inputFilename = args[ctr];
-			String outputFilename = inputFilename + "-new.png";
+			String outputFilename = inputFilename + ".png";
 
 			// Parse the input file
 			Scene scene = (Scene) parser.parse(inputFilename, Scene.class);
