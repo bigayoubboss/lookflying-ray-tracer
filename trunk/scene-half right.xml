@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  big scene
+ -->
+<scene>
+  <camera>
+    <viewPoint>80 -50 35</viewPoint>
+    <viewDir>-3 5 -2</viewDir>
+    <projNormal>-3 5 -2</projNormal>
+    <viewUp>0 0 1</viewUp>
+    <projDistance>14</projDistance>
+    <viewWidth>16</viewWidth>
+    <viewHeight>9</viewHeight>
+  </camera>
+  <image>
+    1280 720
+  </image>
+  <shader name="blue" type="Lambertian">
+    <diffuseColor>.2 .3 1</diffuseColor>
+	<transparency>1</transparency>
+	<refractionCoe>1.2</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="red" type="Lambertian">
+    <diffuseColor>1 .2 .3</diffuseColor>
+	<transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="gray" type="Lambertian">
+    <diffuseColor>.5 .5 .5</diffuseColor>
+<transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+
+  <shader name="glass" type="Phong">
+  	<transparency>.2</transparency>
+    <diffuseColor>.6 .6 .6</diffuseColor>
+	<specularColor>.8 .8 .8</specularColor>
+	<exponent>30</exponent>
+	<refractionCoe>1.5</refractionCoe>
+	<reflectionCoe>0.4</reflectionCoe>
+  </shader>
+    <shader name="plastic-green" type="Phong">
+  	<transparency>1</transparency>
+    <diffuseColor>.12 .8 .03</diffuseColor>
+	<specularColor>.8 .8 .8</specularColor>
+	<exponent>50</exponent>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.7</reflectionCoe>
+  </shader>
+      <shader name="plastic-yellow" type="Phong">
+  	<transparency>1</transparency>
+    <diffuseColor>1 .9 .2</diffuseColor>
+	<specularColor>.8 .8 .8</specularColor>
+	<exponent>50</exponent>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.7</reflectionCoe>
+  </shader>
+     <shader name="plastic-red" type="Phong">
+  	<transparency>1</transparency>
+    <diffuseColor>1 0 0</diffuseColor>
+	<specularColor>.8 .8 .8</specularColor>
+	<exponent>50</exponent>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.7</reflectionCoe>
+  </shader>
+  <shader name="ball000" type="Phong">
+    <diffuseColor>.05 .05 .05</diffuseColor><specularColor>.8 .8 .8</specularColor><exponent>50</exponent>
+    <transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="ball001" type="Phong">
+    <diffuseColor>.1 .1 .8</diffuseColor><specularColor>.8 .8 .8</specularColor><exponent>50</exponent>
+    <transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="ball010" type="Phong">
+    <diffuseColor>.1 .6 .15</diffuseColor><specularColor>.8 .8 .8</specularColor><exponent>50</exponent>
+    <transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="ball011" type="Phong">
+    <diffuseColor>0 .6 1</diffuseColor><specularColor>.8 .8 .8</specularColor><exponent>50</exponent>
+    <transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="ball100" type="Phong">
+    <diffuseColor>.9 0 0</diffuseColor><specularColor>.8 .8 .8</specularColor><exponent>50</exponent>
+    <transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="ball101" type="Phong">
+    <diffuseColor>.9 .1 .9</diffuseColor><specularColor>.8 .8 .8</specularColor><exponent>50</exponent>
+    <transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="ball110" type="Phong">
+    <diffuseColor>.9 .9 .1</diffuseColor><specularColor>.8 .8 .8</specularColor><exponent>50</exponent>
+    <transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="ball111" type="Phong">
+    <diffuseColor> 1  1  1</diffuseColor><specularColor>.8 .8 .8</specularColor><exponent>50</exponent>
+    <transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  <shader name="stick" type="Lambertian">
+    <diffuseColor>.6 .5 .3</diffuseColor>
+    <transparency>1</transparency>
+	<refractionCoe>1</refractionCoe>
+	<reflectionCoe>0.1</reflectionCoe>
+  </shader>
+  
+  <surface type="Sphere">
+	  <shader ref ="ball000"/>
+	  <center>40 25 1</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball001"/>
+	  <center>45 25 1</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball010"/>
+	  <center>45 35 1</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball011"/>
+	  <center>40 35 1</center>
+	  <radius>1</radius>
+  </surface>
+    <surface type="Sphere">
+	  <shader ref ="ball100"/>
+	  <center>40 25 11</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball101"/>
+	  <center>45 25 11</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball110"/>
+	  <center>45 35 11</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball111"/>
+	  <center>40 35 11</center>
+	  <radius>1</radius>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>40 24.75 0.75</minPt>
+		<maxPt>45 25.25 1.25</maxPt>
+  </surface>
+   <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>40 34.75 0.75</minPt>
+		<maxPt>45 35.25 1.25</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>39.75 25 0.75</minPt>
+		<maxPt>40.25 35 1.25</maxPt>
+  </surface>
+       <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>44.75 25 0.75</minPt>
+		<maxPt>45.25 35 1.25</maxPt>
+  </surface>
+    <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>40 24.75 10.75</minPt>
+		<maxPt>45 25.25 11.25</maxPt>
+  </surface>
+   <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>40 34.75 10.75</minPt>
+		<maxPt>45 35.25 11.25</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>39.75 25 10.75</minPt>
+		<maxPt>40.25 35 11.25</maxPt>
+  </surface>
+       <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>44.75 25 10.75</minPt>
+		<maxPt>45.25 35 11.25</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>39.75 24.75 1</minPt>
+		<maxPt>40.25 25.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>44.75 24.75 1</minPt>
+		<maxPt>45.25 25.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>39.75 34.75 1</minPt>
+		<maxPt>40.25 35.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>44.75 34.75 1</minPt>
+		<maxPt>45.25 35.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+	<shader ref="blue"/>
+	<minPt>48 30 0</minPt>
+	<maxPt>60 40 15</maxPt>
+  </surface>
+  <surface type = "Sphere">
+  	<shader ref="blue"/>
+  	<center>28 22 23</center>
+  	<radius>5</radius>
+  </surface>
+  <surface type="Tetrahedron">
+	<shader ref="plastic-red"/>
+	<vertexTop>51 39 22</vertexTop>
+	<vertex1>54 32 15</vertex1>
+	<vertex2>58 37 15</vertex2>
+	<vertex3>50 35 15</vertex3>
+  </surface>
+    
+ 
+  <surface type="Cylinder">
+	<shader ref="blue" />
+	<center1>30 20 0</center1>
+	<height>18</height>
+	<radius>8</radius>
+  </surface>
+    <surface type="Cylinder">
+	<shader ref="red" />
+	<center1>20 15 0</center1>
+	<height>13</height>
+	<radius>3</radius>
+  </surface>
+    <surface type="Tetrahedron">
+	<shader ref="plastic-green"/>
+	<vertexTop>25 10 7</vertexTop>
+	<vertex1>20 5 0</vertex1>
+	<vertex2>30 7 0</vertex2>
+	<vertex3>23 13 0</vertex3>
+  </surface>
+   <surface type="Box">
+    <shader ref="gray" />
+    <minPt>0 0 -3</minPt>
+    <maxPt>80 80 0</maxPt>
+  </surface>
+  <surface type="Sphere">
+	<shader ref="plastic-yellow"/>
+	<center>10 40 6</center>
+	<radius>6</radius>
+  </surface>
+  <surface type="Sphere">
+  	<shader ref="blue"/>
+  	<center>16 30 4</center>
+  	<radius>4</radius>
+  </surface>
+    <surface type="Sphere">
+  	<shader ref="red"/>
+  	<center>12 24 2</center>
+  	<radius>2</radius>
+  </surface>
+ 
+  <surface type="Tetrahedron">
+	<shader ref="blue"/>
+	<vertexTop>10 15 9</vertexTop>
+	<vertex1>4 17 0</vertex1>
+	<vertex2>8 14 0</vertex2>
+	<vertex3>12 16 0</vertex3>
+  </surface>
+  <surface type="Tetrahedron">
+	<shader ref="blue"/>
+	<vertexTop>10 15 9</vertexTop>
+	<vertex1>4 17 0</vertex1>
+	<vertex2>8 14 0</vertex2>
+	<vertex3>12 16 0</vertex3>
+  </surface>
+  <surface type="Sphere">
+	  <shader ref ="ball000"/>
+	  <center>60 15 1</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball001"/>
+	  <center>65 15 1</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball010"/>
+	  <center>65 25 1</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball011"/>
+	  <center>60 25 1</center>
+	  <radius>1</radius>
+  </surface>
+    <surface type="Sphere">
+	  <shader ref ="ball100"/>
+	  <center>60 15 11</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball101"/>
+	  <center>65 15 11</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball110"/>
+	  <center>65 25 11</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball111"/>
+	  <center>60 25 11</center>
+	  <radius>1</radius>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>60 14.75 0.75</minPt>
+		<maxPt>65 15.25 1.25</maxPt>
+  </surface>
+   <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>60 24.75 0.75</minPt>
+		<maxPt>65 25.25 1.25</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>59.75 15 0.75</minPt>
+		<maxPt>60.25 25 1.25</maxPt>
+  </surface>
+       <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>64.75 15 0.75</minPt>
+		<maxPt>65.25 25 1.25</maxPt>
+  </surface>
+    <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>60 14.75 10.75</minPt>
+		<maxPt>65 15.25 11.25</maxPt>
+  </surface>
+   <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>60 24.75 10.75</minPt>
+		<maxPt>65 25.25 11.25</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>59.75 15 10.75</minPt>
+		<maxPt>60.25 25 11.25</maxPt>
+  </surface>
+       <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>64.75 15 10.75</minPt>
+		<maxPt>65.25 25 11.25</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>59.75 14.75 1</minPt>
+		<maxPt>60.25 15.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>64.75 14.75 1</minPt>
+		<maxPt>65.25 15.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>59.75 24.75 1</minPt>
+		<maxPt>60.25 25.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>64.75 24.75 1</minPt>
+		<maxPt>65.25 25.25 11</maxPt>
+  </surface>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <surface type="Sphere">
+	  <shader ref ="ball000"/>
+	  <center>50 5 1</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball001"/>
+	  <center>55 5 1</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball010"/>
+	  <center>55 15 1</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball011"/>
+	  <center>50 15 1</center>
+	  <radius>1</radius>
+  </surface>
+    <surface type="Sphere">
+	  <shader ref ="ball100"/>
+	  <center>50 5 11</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball101"/>
+	  <center>55 5 11</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball110"/>
+	  <center>55 15 11</center>
+	  <radius>1</radius>
+  </surface>
+   <surface type="Sphere">
+	  <shader ref ="ball111"/>
+	  <center>50 15 11</center>
+	  <radius>1</radius>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>50 4.75 0.75</minPt>
+		<maxPt>55 5.25 1.25</maxPt>
+  </surface>
+   <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>50 14.75 0.75</minPt>
+		<maxPt>55 15.25 1.25</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>49.75 5 0.75</minPt>
+		<maxPt>50.25 15 1.25</maxPt>
+  </surface>
+       <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>54.75 5 0.75</minPt>
+		<maxPt>55.25 15 1.25</maxPt>
+  </surface>
+    <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>50 4.75 10.75</minPt>
+		<maxPt>55 5.25 11.25</maxPt>
+  </surface>
+   <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>50 14.75 10.75</minPt>
+		<maxPt>55 15.25 11.25</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>49.75 5 10.75</minPt>
+		<maxPt>50.25 15 11.25</maxPt>
+  </surface>
+       <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>54.75 5 10.75</minPt>
+		<maxPt>55.25 15 11.25</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>49.75 4.75 1</minPt>
+		<maxPt>50.25 5.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>54.75 4.75 1</minPt>
+		<maxPt>55.25 5.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>49.75 14.75 1</minPt>
+		<maxPt>50.25 15.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+		<shader ref="stick"/>
+		<minPt>54.75 14.75 1</minPt>
+		<maxPt>55.25 15.25 11</maxPt>
+  </surface>
+  <surface type="Box">
+  	<shader ref="glass"/>
+  	<minPt>45 10 0</minPt>
+  	<maxPt>58 25 13</maxPt>
+  </surface>
+  
+  <light>
+    <position>-100 -50 20</position>
+    <intensity>.4 .4 .4</intensity>
+  </light>
+  <light>
+    <position>60 -30 30</position>
+    <intensity>.2 .2 .2</intensity>
+  </light>
+   <light>
+    <position>50 60 30</position>
+    <intensity>.5 .5 .5</intensity>
+  </light>
+<light>
+    <position>40 40 50</position>
+    <intensity>.5 .5 .5</intensity>
+  </light>
+  <light>
+    <position>90 20 40</position>
+    <intensity>.5 .5 .5</intensity>
+  </light>
+</scene>
